@@ -1,3 +1,27 @@
 <p>
   user-detail works!
 </p>
+
+<h1 class='center'>Liste users</h1>
+<div class='container'>
+  <div class="row">
+    <ng-template [ngIf]="userDisplay === 1">
+      <div class="card horizontal" (click)="selectPokemon(user)" appBorderCardDirective="red">
+        <div class="card-image">
+          <img [src]="">
+        </div>
+        <div class="card-stacked">
+          <div class="card-content">
+            <p>{{ user.email }}</p>
+            <p>
+              <small>{{ user.name.first }}</small>
+            </p>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template [ngIf]="userDisplay === 0">
+      User inconnu
+    </ng-template>
+  </div>
+</div>

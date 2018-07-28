@@ -8,9 +8,10 @@ import { UserListComponent } from './user-list/user-list.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'user' },
-  { path: '**', component: PageNotFoundComponent },
   { path: 'user', component: UserListComponent /*, canActivate: [AuthGuard] */ }, // canActivate : conditionner le routage par des régles metiers  
   { path: 'user/:id', component: UserDetailComponent /*, canActivate: [AuthGuard] */ }, // canActivate : conditionner le routage par des régles metiers  
+  { path: '**', component: PageNotFoundComponent }, // 404
+
 ];
 
 @NgModule({

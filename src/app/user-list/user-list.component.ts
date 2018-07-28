@@ -4,7 +4,6 @@ import { ActivatedRoute, Router, Params } from '@angular/router';
 import { POKEMONS } from '../mock/mock-user';
 import { User } from '../models/user.model';
 
-
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',
@@ -12,7 +11,7 @@ import { User } from '../models/user.model';
 })
 export class UserListComponent implements OnInit {
 
-  users: User[] = null;
+  tabUser: User[] = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -20,12 +19,15 @@ export class UserListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.users = POKEMONS;
-    console.log(this.users);
+    this.tabUser = POKEMONS;
+    console.log(this.tabUser);
   }
 
   selectPokemon(event: any){
-    console.log(event);
+    console.log(event.id);
+
+    //navigation link.
+    this.router.navigate(['user/' + event.id]);
   }
 
   goBack(): void{
