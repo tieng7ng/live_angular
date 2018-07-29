@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, Params } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 import { POKEMONS } from '../mock/mock-user';
 import { User } from '../models/user.model';
@@ -15,7 +16,9 @@ export class UserListComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private translateService: TranslateService
+
   ) { }
 
   ngOnInit() {
