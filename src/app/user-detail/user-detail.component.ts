@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 
 
-import { POKEMONS } from '../mock/mock-user';
+// import { POKEMONS } from '../mock/mock-user';
 import { User } from '../models/user.model';
 import { UserService } from '../services/user.service'
 
@@ -28,17 +28,28 @@ export class UserDetailComponent implements OnInit {
     console.log('> user component init');
     //=====
     // Init user
-    this.tabUser = POKEMONS;
     console.log(this.tabUser);
 
     this.route.paramMap.subscribe((params: ParamMap) => {
       let id = params.get('id');
 
-      let fUser = this.userService.findUserInTab(this.tabUser, 'id', id);
-      if (fUser !== false) {
-        this.user = fUser;
-        this.userDisplay = 1;
-      }
+      this.userService.searchUser([['_id', id]])
+        .subscribe(data => {
+          //=====
+          // Traitement du resultat de la recherche
+          if (data.length == 1) {
+            this.userDisplay = 1;
+            this.user = data[0];
+          } else {
+            this.userDisplay = 0;
+          }
+          // Traitement du resultat de la recherche
+          //=====
+
+          console.log(data);
+          console.log(this.user);
+        }
+        );
     });
     // Init user
     //=====

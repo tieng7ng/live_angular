@@ -16,6 +16,10 @@
             <p>
               <small>{{ user.name.first }}</small>
             </p>
+            <div *ngFor='let userAddress of user.address' class="col s6 m4">
+                {{ userAddress._id }} - 
+              {{ userAddress.street }}
+            </div>
           </div>
         </div>
       </div>
