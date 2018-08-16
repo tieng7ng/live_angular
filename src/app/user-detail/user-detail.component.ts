@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 
 
 // import { POKEMONS } from '../mock/mock-user';
@@ -20,6 +20,7 @@ export class UserDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private userService: UserService
   ) {
   }
@@ -28,8 +29,6 @@ export class UserDetailComponent implements OnInit {
     console.log('> user component init');
     //=====
     // Init user
-    console.log(this.tabUser);
-
     this.route.paramMap.subscribe((params: ParamMap) => {
       let id = params.get('id');
 
@@ -56,4 +55,9 @@ export class UserDetailComponent implements OnInit {
 
   }
 
+
+  editUser(user: User) {
+    //navigation link.
+    this.router.navigate(['user/' + user._id + '/edit']);
+  }
 }
