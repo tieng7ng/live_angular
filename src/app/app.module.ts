@@ -13,14 +13,19 @@ import { Observable } from 'rxjs';
 //=====
 // Component
 import { AppComponent } from './app.component';
-import { BorderCardDirectiveDirective } from './directives/border-card-directive.directive';
-import { UserListComponent } from './user-list/user-list.component';
-import { UserDetailComponent } from './user-detail/user-detail.component';
-import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { HeaderComponent } from './header/header.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+
+import { UserDetailComponent } from './user-detail/user-detail.component';
 import { UserEditComponent } from './user-edit/user-edit.component';
-//import { Observable } from 'rxjs';
+import { UserListComponent } from './user-list/user-list.component';
 // Component
+//=====
+
+//=====
+// Directive
+import { BorderCardDirectiveDirective } from './directives/border-card-directive.directive';
+// Directive
 //=====
 
 // Fichier de traduction

@@ -2,19 +2,55 @@
   user-edit works!
 </p>
 
-<form (ngSubmit)="register()" [formGroup]="userForm">
+<form [formGroup]="userForm">
   <div class="form-group">
-    <label class="center-block">Email:</label>
+    <label class="center-block">{{ "email" | translate }}:</label>
     <input formControlName="email">
     <div *ngIf="formError.email" class="alert alert-danger">{{ formError.email }}</div>
-
   </div>
+  <div formGroupName="name">
+
+    <div class="form-group">
+      <label class="center-block">{{ "lastname" | translate }}:</label>
+      <input formControlName="last">
+      <div *ngIf="formError.last" class="alert alert-danger">{{ formError.last }}</div>
+    </div>
+    <div class="form-group">
+      <label class="center-block">{{ "firstname" | translate }}:</label>
+      <input formControlName="first">
+      <div *ngIf="formError.first" class="alert alert-danger">{{ formError.first }}</div>
+    </div>
+  </div>
+
+
   <div class="form-group">
-    <label class="center-block">Password:</label>
+    <label class="center-block">{{ "password" | translate }}:</label>
     <input type="password" formControlName="password">
     <div *ngIf="formError.password" class="alert alert-danger">{{ formError.password }}</div>
-
   </div>
 
-  <button type="submit" [disabled]="userForm.invalid">{{ "Register" | translate }}</button>
+  <div class="form-group">
+    <label class="center-block">{{ "address" | translate }}:</label>
+    <button type="submit" (click)="addAddress()">{{ "add address" | translate }}</button>
+    <button type="submit" (click)="deleteAddress()">{{ "delete address" | translate }}</button>
+
+    <ng-template [ngIf]="dUserExist===1">
+      <div *ngFor="let userAddress of dUser?.address; let idx = index" class="col s6 m4">
+        {{ userAddress._id }}
+        << {{ idx }} <input value="{{ userAddress.street }}">
+      </div>
+    </ng-template>
+
+    <ng-template [ngIf]="dUserExist===0">
+
+      <div *ngIf="formError.street" class="alert alert-danger">{{ formError.street }}</div>
+
+      <div *ngFor="let a of dCmptAddress; let idx = index">
+        {{ idx }} <input formControlName="street">
+        <div *ngIf="formError.street" class="alert alert-danger">{{ formError.street }}</div>
+
+      </div>
+    </ng-template>
+  </div>nam {{ userForm.invalid }}
+  <button type="submit " [disabled]="userForm.invalid " (click)="register() ">{{ "Register " | translate }}</button>
 </form>

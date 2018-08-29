@@ -1,3 +1,18 @@
 {
-  "users list" : "Liste d'utilisateurs"
+	"add address": "Ajouter adresse",
+	"add user": "Ajouter utilisateur",
+	"address": "Adresse",
+	"delete address":"Supprimer adresse",
+	"email": "Email",
+	"firstname": "Prénom",
+	"lastname": "Nom",
+	"non-compliance email": "Email non conforme",
+	"required firstname": "Prénom requis",
+	"required lastname": "Nom requis",
+	"required password": "Password requis",
+	"required street": "Rue requis",
+	"password": "Mot de passe",
+	"password min 8 chars": "Le mot de passe doit faire minimum 8 caractères",
+	"users list": "Liste d'utilisateurs",
+	"": ""
 }
