@@ -5,6 +5,7 @@ import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 
 import { TranslateService } from '@ngx-translate/core';
 
+import { SessionLocService } from '../services/session-loc.service';
 import { TranslateLocService } from '../services/translate-loc.service';
 import { User } from '../models/user.model';
 import { UserService } from '../services/user.service'
@@ -16,6 +17,8 @@ import { UserService } from '../services/user.service'
 })
 
 export class UserEditComponent implements OnInit {
+  // affichage de l'user connecté
+  displayIdentity: string;
 
   userEmailCtrl: FormControl;
   userFirstnameCtrl: FormControl;
@@ -27,8 +30,8 @@ export class UserEditComponent implements OnInit {
   // display
   userForm: FormGroup;
   formError = {
-    'password': '',
-    'email': ''
+//    'password': '',
+//    'email': ''
   }
   // display
   //=====
@@ -63,12 +66,23 @@ export class UserEditComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private userService: UserService,
+    private sessionLoc: SessionLocService,
     private translateService: TranslateService) {
   }
 
   ngOnInit() {
     console.log('>> ngOnInit');
-    //    this.dUser = new User;
+
+
+    //=====
+    // Connecté?
+    if (!this.sessionLoc.getToken()) {
+      this.router.navigate(['/signin']);
+    }
+    this.displayIdentity = this.sessionLoc.getFirstname() + ' - ' + this.sessionLoc.getLastname();
+    // Connecté?
+    //=====
+
     //=====
     // Init user
     this.route.paramMap.subscribe((params: ParamMap) => {
@@ -217,7 +231,7 @@ export class UserEditComponent implements OnInit {
   }
 
   /**
-   * itialise les messages d'erreur
+   * Initialise les messages d'erreur
    * @param data : liste des changements
    */
   onValueChanged(data?: any) {
@@ -285,7 +299,7 @@ export class UserEditComponent implements OnInit {
       let resultPost = this.userService.postUser(this.userForm.value).then((val) => {
         console.log('>>> then');
         console.log(val);
-        console.log('Return post', val._id, JSON.stringify(val));
+        console.log('Return post', JSON.stringify(val));
         console.log(JSON.stringify(resultPost));
   
       }).catch( (error) => {

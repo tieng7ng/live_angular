@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   USER_API_ROOT: 'http://localhost:3000/users',
+  SIGN_API_ROOT: 'http://localhost:3000/sign',
 };
 
 /*

@@ -27,7 +27,7 @@ export class TranslateLocService {
     );
   }
 
-  getValidationMessage():Observable<string[]> {
+  getValidationMessage()/*:Observable<string[]>*/ {
     return this.validationMessage;
   }
 

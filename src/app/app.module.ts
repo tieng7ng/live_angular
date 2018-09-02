@@ -10,6 +10,8 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Observable } from 'rxjs';
 //import { FormBuilder, FormGroup } from '@angular/forms';
 
+import { AngularWebStorageModule } from 'angular-web-storage';
+
 //=====
 // Component
 import { AppComponent } from './app.component';
@@ -25,6 +27,7 @@ import { UserListComponent } from './user-list/user-list.component';
 //=====
 // Directive
 import { BorderCardDirectiveDirective } from './directives/border-card-directive.directive';
+import { SignInComponent } from './sign-in/sign-in.component';
 // Directive
 //=====
 
@@ -44,6 +47,7 @@ export const createTranslateLoader = (http: HttpClient) => {
     PageNotFoundComponent,
     HeaderComponent,
     UserEditComponent,
+    SignInComponent,
 //    FormBuilder,
 //    FormGroup
   ],
@@ -52,6 +56,7 @@ export const createTranslateLoader = (http: HttpClient) => {
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
+    AngularWebStorageModule,
 //    Observable,
     TranslateModule.forRoot({
       loader: {

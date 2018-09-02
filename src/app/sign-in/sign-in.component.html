@@ -1,0 +1,23 @@
+<app-header [displayHeadIdentity]="displayIdentity"></app-header>
+
+<p>
+  user-edit works!
+</p>
+
+<form [formGroup]="userForm">
+  <div class="form-group">
+    <label class="center-block">{{ "email" | translate }}:</label>
+    <input formControlName="email">
+    <div *ngIf="formError.email" class="alert alert-danger">{{ formError.email }}</div>
+  </div>
+
+
+  <div class="form-group">
+    <label class="center-block">{{ "password" | translate }}:</label>
+    <input type="password" formControlName="password">
+    <div *ngIf="formError.password" class="alert alert-danger">{{ formError.password }}</div>
+  </div>
+
+
+  <button type="submit " [disabled]="userForm.invalid " (click)="register() ">{{ "Envoyer " | translate }}</button>
+</form>

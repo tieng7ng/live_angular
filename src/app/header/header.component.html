@@ -4,6 +4,8 @@
 <a [routerLink]="['/user/edit']">{{ "add user" | translate }}</a> |
 <a [routerLink]="['/user']">{{ "users list" | translate }}</a> |
 
+{{ displayHeadIdentity }} <button (click)="logout()">{{ "logout" | translate }}</button>
+
 <div>
 <button (click)="useLanguage('en')">en</button>
 <button (click)="useLanguage('fr')">fr</button>

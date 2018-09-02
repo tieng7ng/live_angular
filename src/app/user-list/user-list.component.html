@@ -1,6 +1,4 @@
-<p>
-  user-list works!
-</p>
+<app-header [displayHeadIdentity]="displayIdentity"></app-header>
 
 <h1 class='center'>{{ "users list" | translate }}</h1>
 <div class='container'>
@@ -17,8 +15,7 @@
               <small>{{ user.name.first }}</small>
             </p>
             <div *ngFor='let userAddress of user.address' class="col s6 m4">
-                {{ userAddress._id }} - 
-              {{ userAddress.street }}
+              {{ userAddress._id }} - {{ userAddress.street }}
             </div>
           </div>
         </div>
@@ -26,7 +23,6 @@
     </div>
   </div>
 </div>
-
 
 <input #box (keyup.enter)="onkey(box.value)" (blur)="onkey(box.value)">
 <p>{{ values }}</p>

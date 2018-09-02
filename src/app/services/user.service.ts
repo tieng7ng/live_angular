@@ -56,10 +56,53 @@ export class UserService {
   /**
    * 
    */
-  public getUsers(): Observable<User[]> {
+  public getUsers(option: any) {
     console.log('user - service : getUsers');
-    return this.http.get<User[]>(environment.USER_API_ROOT);
+    let param: string = '';
+    let cmpt: number = 0;
+    for (var key in option) {
+      if (cmpt == 0) {
+        param += '?';
+      } else {
+        param += '&';
+      }
+      param += key + '=' + option[key];
+    }
+
+
+    let url = environment.USER_API_ROOT + param;
+    console.log(url);
+    return new Promise((resolve, reject) => {
+      this.http.get<User[]>(url)
+      .toPromise()
+      .then(res => {
+        console.log(res);
+        resolve(res);
+      })
+      .catch(err => {
+        console.log("GET call in error", err, url, param);
+        reject(err);
+      });
+    });
+      /*
+        .subscribe(
+          returnUser => {
+            console.log("GET call successful value returned in body",
+              returnUser);
+            resolve(returnUser);
+          },
+          response => {
+            console.log("GET call in error", response, url, param);
+            reject(response);
+          },
+          () => {
+            console.log("The GET observable is now completed.");
+          }
+        );
+    });
+    */
   }
+
 
   public postUser(param: User) {
     let headers = new HttpHeaders()
@@ -85,6 +128,36 @@ export class UserService {
           },
           () => {
             console.log("The POST observable is now completed.");
+          }
+        );
+    });
+  } // public postUser(param: string) 
+
+
+  public signinUser(param: User) {
+    let headers = new HttpHeaders()
+      .set("Content-Type", "application/json");
+
+    let url = environment.SIGN_API_ROOT + '/in';
+
+    console.log('user - service : postUsers'
+      , url, JSON.stringify(JSON.stringify(param)));
+
+    return new Promise((resolve, reject) => {
+      this.http.post<User>(url, JSON.stringify(JSON.stringify(param)),
+        { headers })
+        .subscribe(
+          returnUser => {
+            console.log("SIGNIN call successful value returned in body",
+              returnUser);
+            resolve(returnUser);
+          },
+          response => {
+            console.log("SIGNIN call in error", response, url, param);
+            reject(response);
+          },
+          () => {
+            console.log("The SIGNIN observable is now completed.");
           }
         );
     });

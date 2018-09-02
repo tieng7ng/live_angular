@@ -6,6 +6,7 @@
 	"email": "Email",
 	"firstname": "Prénom",
 	"lastname": "Nom",
+	"logout": "Déconnexion",
 	"non-compliance email": "Email non conforme",
 	"required firstname": "Prénom requis",
 	"required lastname": "Nom requis",
