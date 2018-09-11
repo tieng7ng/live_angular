@@ -15,7 +15,9 @@ import { User_name } from '../models/user_name.model';
 @Injectable({
   providedIn: 'root'
 })
+
 export class UserService {
+  private token: string;
 
   loading = false;
   errorMessage = '';
@@ -25,25 +27,33 @@ export class UserService {
     console.log('userService Constructor');
   }
 
+  setToken(tokenLoc: string) {
+    this.token = tokenLoc;
+  }
+
   /**
    * Recherche d'un User dans une liste à partir nom et valeur d'un champ
-   * @param tabParam : liste parametre ([ [field_name, value] ])
+   * @param tabParam : liste parametre ([ [[field_name], [value]] ])
    */
   searchUser(tabParam: any): Observable<User[]> {
     console.log('user - service : searchUser');
 
-    let param: string = '';
     console.log(tabParam);
+    console.log('>> param ' + tabParam[0][0][0] + '=', '---' + tabParam[0][1][0]);
+
+
     //=====
     // Construction de la requete
+    let param: string = '';
+
     for (let cmpt = 0; cmpt < tabParam.length; cmpt++) {
+      console.log('>>>>>', tabParam[cmpt][0][0], tabParam[cmpt][1][0], '<<<<<<<<<');
       if (cmpt == 0) {
         param += '?';
       } else {
         param += '&';
       }
-      param += tabParam[cmpt][0] + '=' + tabParam[cmpt][1];
-      console.log(param);
+      param += tabParam[cmpt][0][0] + '=' + tabParam[cmpt][1][0];
     }
     // Construction de la requete
     //=====
@@ -56,8 +66,11 @@ export class UserService {
   /**
    * 
    */
-  public getUsers(option: any) {
+  public getUsers(option?: any) {
     console.log('user - service : getUsers');
+
+    //=====
+    // build query params
     let param: string = '';
     let cmpt: number = 0;
     for (var key in option) {
@@ -68,53 +81,80 @@ export class UserService {
       }
       param += key + '=' + option[key];
     }
-
+    // build query params
+    //=====
 
     let url = environment.USER_API_ROOT + param;
-    console.log(url);
-    return new Promise((resolve, reject) => {
-      this.http.get<User[]>(url)
-      .toPromise()
-      .then(res => {
-        console.log(res);
-        resolve(res);
+    console.log('>>> url ', url);
+
+
+    let headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+    //      .append('Access-Control-Allow-Origin', '*')
+          .append('token', this.token)
+    //      .append('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        //      'Authorization': 'my-auth-token'
       })
-      .catch(err => {
-        console.log("GET call in error", err, url, param);
-        reject(err);
-      });
-    });
-      /*
+    };
+
+    // Authorization: `Bearer ${currentUser.token}`
+    console.log(headers, headers.get('Authorization'));
+
+    return new Promise((resolve, reject) => {
+      this.http.get<User>(url,
+        { headers: headers})
         .subscribe(
           returnUser => {
-            console.log("GET call successful value returned in body",
+            console.log("POST call successful value returned in body",
               returnUser);
             resolve(returnUser);
           },
           response => {
-            console.log("GET call in error", response, url, param);
+            console.log("POST call in error", response, url);
             reject(response);
           },
           () => {
-            console.log("The GET observable is now completed.");
+            console.log("The POST observable is now completed.");
           }
         );
     });
+    /*
+    return new Promise((resolve, reject) => {
+      this.http.get<User[]>(url, { headers: headers })
+        .toPromise()
+        .then(res => {
+          console.log('>>>> send OK');
+          console.log(res);
+          resolve(res);
+        })
+        .catch(err => {
+          console.log("GET call in error", err, url, param);
+          reject(err);
+        });
+    });
+
     */
   }
 
 
-  public postUser(param: User) {
+  public postUser(userParam: User) {
     let headers = new HttpHeaders()
       .set("Content-Type", "application/json");
 
-    let url = environment.USER_API_ROOT;
+    let param: string = '?token=' + this.token;
+
+    let url = environment.USER_API_ROOT + param;
 
     console.log('user - service : postUsers'
-      , url, JSON.stringify(JSON.stringify(param)));
+      , url, JSON.stringify(JSON.stringify(userParam)));
 
     return new Promise((resolve, reject) => {
-      this.http.post<User>(url, JSON.stringify(JSON.stringify(param)),
+      this.http.post<User>(url, JSON.stringify(JSON.stringify(userParam)),
         { headers })
         .subscribe(
           returnUser => {
@@ -123,7 +163,7 @@ export class UserService {
             resolve(returnUser);
           },
           response => {
-            console.log("POST call in error", response, url, param);
+            console.log("POST call in error", response, url, userParam);
             reject(response);
           },
           () => {
@@ -135,16 +175,19 @@ export class UserService {
 
 
   public signinUser(param: User) {
+    
     let headers = new HttpHeaders()
-      .set("Content-Type", "application/json");
+      .set("content-type", "application/json")
+//      .set("authorization", "my-auth-token");
 
     let url = environment.SIGN_API_ROOT + '/in';
 
-    console.log('user - service : postUsers'
+    console.log('user - service : postUsers ----  '
       , url, JSON.stringify(JSON.stringify(param)));
 
+     
     return new Promise((resolve, reject) => {
-      this.http.post<User>(url, JSON.stringify(JSON.stringify(param)),
+      this.http.post<User>(url, (JSON.stringify(param)),
         { headers })
         .subscribe(
           returnUser => {
@@ -163,17 +206,31 @@ export class UserService {
     });
   } // public postUser(param: string) 
 
-  public putUser(idUser: number, param: User) {
+  public putUser(idUser: number, userParam: User) {
     let headers = new HttpHeaders()
       .set("Content-Type", "application/json");
-    let returnUser: User;
 
-    console.log('user - service : putUsers'
-      , environment.USER_API_ROOT + '/' + idUser, JSON.stringify(param));
+    const httpOptions = {
+      headers: new HttpHeaders({
+        //        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/json',
+
+//        'Authorization': 'my-auth-token'
+      })
+    };
+
+
+    let returnUser: User;
+    let param: string = `/${idUser}`;
+    let url: string = environment.USER_API_ROOT + param;
+
+    console.log('user - service : putUsers');
+    console.log(url, JSON.stringify(JSON.stringify(userParam)));
 
     return new Promise((resolve, reject) => {
-      this.http.put<User>(environment.USER_API_ROOT + '/' + idUser, JSON.stringify(param),
-        { headers })
+      this.http.put<User>(url, JSON.stringify(JSON.stringify(userParam)),
+        //        { headers })
+        httpOptions)
         .subscribe(
           returnUser => {
             console.log("PUT call successful value returned in body",

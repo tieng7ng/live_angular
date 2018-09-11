@@ -30,8 +30,8 @@ export class UserEditComponent implements OnInit {
   // display
   userForm: FormGroup;
   formError = {
-//    'password': '',
-//    'email': ''
+    //    'password': '',
+    //    'email': ''
   }
   // display
   //=====
@@ -92,7 +92,9 @@ export class UserEditComponent implements OnInit {
       this.buildFormControl();
 
       if (id) {
-        this.userService.searchUser([['_id', id]])
+        this.userService.setToken(this.sessionLoc.getToken());
+
+        this.userService.searchUser([[['_id'], [id]]])
           .subscribe(data => {
             //=====
             // Traitement du resultat de la recherche
@@ -295,19 +297,20 @@ export class UserEditComponent implements OnInit {
       // Post User
       console.log('>>> user POST - registerX');
       console.log(this.userForm.value);
+      this.userService.setToken(this.sessionLoc.getToken());
 
       let resultPost = this.userService.postUser(this.userForm.value).then((val) => {
         console.log('>>> then');
         console.log(val);
         console.log('Return post', JSON.stringify(val));
         console.log(JSON.stringify(resultPost));
-  
-      }).catch( (error) => {
+
+      }).catch((error) => {
         console.log('>> catch');
         console.log(error);
       })
 
-    
+
 
       // Post User
       //=====
@@ -322,6 +325,8 @@ export class UserEditComponent implements OnInit {
       } else {
         delete this.userForm.value.password;
       }
+      delete this.userForm.value.street;
+      this.userService.setToken(this.sessionLoc.getToken());
 
       let resultPut = this.userService.putUser(this.dUser._id, this.userForm.value).then((val) => {
         console.log('>>> then');

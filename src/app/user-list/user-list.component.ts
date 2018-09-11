@@ -49,8 +49,8 @@ export class UserListComponent implements OnInit {
     // Connecté?
     //=====
 
-    let tabOption = {token: this.sessionLoc.getToken()};
-    this.userS.getUsers(tabOption).then((val) => {
+    this.userS.setToken(this.sessionLoc.getToken());
+    this.userS.getUsers().then((val) => {
       console.log('>>> then');
       console.log(val);
       this.tabUser = val;
@@ -64,7 +64,7 @@ export class UserListComponent implements OnInit {
   }
 
   selectPokemon(event: any) {
-    console.log(event.id);
+    console.log(event._id);
 
     //navigation link.
     this.router.navigate(['user/' + event._id]);

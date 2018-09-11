@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 
+import { SessionLocService } from '../services/session-loc.service';
 
 // import { POKEMONS } from '../mock/mock-user';
 import { User } from '../models/user.model';
@@ -21,7 +22,9 @@ export class UserDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private userService: UserService
+    private sessionLoc: SessionLocService,
+
+    private userService: UserService,
   ) {
   }
 
@@ -31,8 +34,9 @@ export class UserDetailComponent implements OnInit {
     // Init user
     this.route.paramMap.subscribe((params: ParamMap) => {
       let id = params.get('id');
+      this.userService.setToken(this.sessionLoc.getToken());
 
-      this.userService.searchUser([['_id', id]])
+      this.userService.searchUser([[['_id'], [id]]])
         .subscribe(data => {
           //=====
           // Traitement du resultat de la recherche

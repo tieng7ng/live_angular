@@ -7,8 +7,9 @@ export class User {
 
     constructor(
         public _id: number,
-        public email: String,
+        public email: string,
         public name: User_name,
+        public password: string,
         public address: User_address[]
     ) {
 
@@ -20,6 +21,7 @@ export class User {
             json['_id'],
             json['email'],
             json['name'],
+            json['password'],
             json['address']
         );
     }
