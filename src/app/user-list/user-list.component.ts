@@ -54,8 +54,6 @@ export class UserListComponent implements OnInit {
       console.log('>>> then');
       console.log(val);
       this.tabUser = val;
-
-
     }).catch((error) => {
       console.log('>> catch');
       console.log(error);

@@ -13,6 +13,18 @@ import { Observable } from 'rxjs';
 
 import { AngularWebStorageModule } from 'angular-web-storage';
 
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { MyMaterialModule } from './modules/material.module';
+
+//=====
+// Material  MatFormFieldControl
+//import { MatDialogModule, MatFormFieldModule, MatInputModule, MatToolbarModule } from '@angular/material';
+import { MatInputModule } from '@angular/material';
+
+// Material
+//=====
+
 //=====
 // Component
 import { AppComponent } from './app.component';
@@ -29,6 +41,8 @@ import { UserListComponent } from './user-list/user-list.component';
 // Directive
 import { BorderCardDirectiveDirective } from './directives/border-card-directive.directive';
 import { SignInComponent } from './sign-in/sign-in.component';
+import { MyDialogOptionComponent } from './my-dialog-option/my-dialog-option.component';
+import { MyDialogComponent } from './my-dialog/my-dialog.component';
 // Directive
 //=====
 
@@ -49,16 +63,34 @@ export const createTranslateLoader = (http: HttpClient) => {
     HeaderComponent,
     UserEditComponent,
     SignInComponent,
-//    FormBuilder,
-//    FormGroup
+    MyDialogOptionComponent,
+    MyDialogComponent,
+    //    FormBuilder,
+    //    FormGroup
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
     AngularWebStorageModule,
-//    Observable,
+    
+    MatInputModule,
+    /*
+    //=====
+    // Material
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatToolbarModule,
+    // Material
+    //=====
+    */
+
+    MyMaterialModule,
+
+    //    Observable,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

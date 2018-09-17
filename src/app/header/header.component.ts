@@ -28,6 +28,7 @@ export class HeaderComponent implements OnInit {
   }
 
   logout() {
+    console.log('header component - logout')
     this.sessionLoc.reset();
     this.route.navigate(['/signin']);
 

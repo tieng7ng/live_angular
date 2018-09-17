@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 
-
+import { MatDialog, MatDialogRef } from '@angular/material';
 import { TranslateService } from '@ngx-translate/core';
 
 import { SessionLocService } from '../services/session-loc.service'
@@ -42,10 +42,9 @@ export class SignInComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private session: SessionLocService,
-    private translateService: TranslateService,
     private translateLocService: TranslateLocService,
     private userService: UserService,
-
+    private dialog: MatDialog,
   ) { }
 
   ngOnInit() {
@@ -195,6 +194,7 @@ export class SignInComponent implements OnInit {
       this.session.setLastname(val['lastname']);
       // Passage de l'identifiant dans le header
       this.displayIdentity = this.session.getFirstname() + ' - '+ this.session.getLastname();
+      this.router.navigate(['/user']);
 
     }).catch((error) => {
       console.log('>> catch');

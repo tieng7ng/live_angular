@@ -35,7 +35,7 @@ export class UserService {
    * Recherche d'un User dans une liste à partir nom et valeur d'un champ
    * @param tabParam : liste parametre ([ [[field_name], [value]] ])
    */
-  searchUser(tabParam: any): Observable<User[]> {
+  public searchUser(tabParam: any): Observable<User[]> {
     console.log('user - service : searchUser');
 
     console.log(tabParam);
@@ -60,7 +60,14 @@ export class UserService {
 
     let url = environment.USER_API_ROOT + param;
     console.log('URL  ' + url);
-    return this.http.get<User[]>(url);
+
+    let headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      //      .append('Access-Control-Allow-Origin', '*')
+      .append('token', this.token)
+    //      .append('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+
+    return this.http.get<User[]>(url, { headers: headers });
   }
 
   /**
@@ -90,8 +97,8 @@ export class UserService {
 
     let headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
-    //      .append('Access-Control-Allow-Origin', '*')
-          .append('token', this.token)
+      //      .append('Access-Control-Allow-Origin', '*')
+      .append('token', this.token)
     //      .append('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
 
 
@@ -107,7 +114,7 @@ export class UserService {
 
     return new Promise((resolve, reject) => {
       this.http.get<User>(url,
-        { headers: headers})
+        { headers: headers })
         .subscribe(
           returnUser => {
             console.log("POST call successful value returned in body",
@@ -123,22 +130,6 @@ export class UserService {
           }
         );
     });
-    /*
-    return new Promise((resolve, reject) => {
-      this.http.get<User[]>(url, { headers: headers })
-        .toPromise()
-        .then(res => {
-          console.log('>>>> send OK');
-          console.log(res);
-          resolve(res);
-        })
-        .catch(err => {
-          console.log("GET call in error", err, url, param);
-          reject(err);
-        });
-    });
-
-    */
   }
 
 
@@ -175,17 +166,17 @@ export class UserService {
 
 
   public signinUser(param: User) {
-    
+
     let headers = new HttpHeaders()
       .set("content-type", "application/json")
-//      .set("authorization", "my-auth-token");
+    //      .set("authorization", "my-auth-token");
 
     let url = environment.SIGN_API_ROOT + '/in';
 
     console.log('user - service : postUsers ----  '
       , url, JSON.stringify(JSON.stringify(param)));
 
-     
+
     return new Promise((resolve, reject) => {
       this.http.post<User>(url, (JSON.stringify(param)),
         { headers })
@@ -215,7 +206,7 @@ export class UserService {
         //        'Content-Type': 'application/x-www-form-urlencoded',
         'Content-Type': 'application/json',
 
-//        'Authorization': 'my-auth-token'
+        //        'Authorization': 'my-auth-token'
       })
     };
 
@@ -247,5 +238,31 @@ export class UserService {
         );
     });
   }
+
+  public deleteUser(idUser: number, userParam: User) {
+    let param: string = `/${idUser}`;
+    let url: string = environment.USER_API_ROOT + param;
+
+    console.log('user - service : deleteUsers');
+
+    return new Promise((resolve, reject) => {
+      this.http.delete<User>(url)
+        .subscribe(
+          returnUser => {
+            console.log("DELETE call successful value returned in body",
+              returnUser);
+            resolve(returnUser);
+          },
+          response => {
+            console.log("DELETE call in error", response);
+            reject(response);
+          },
+          () => {
+            console.log("The DELETE observable is now completed.");
+          }
+        );
+    });
+  }
+
 
 }

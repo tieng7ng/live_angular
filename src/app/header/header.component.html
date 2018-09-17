@@ -1,12 +1,19 @@
-<p>
-  header works!
-</p>
-<a [routerLink]="['/user/edit']">{{ "add user" | translate }}</a> |
-<a [routerLink]="['/user']">{{ "users list" | translate }}</a> |
+<mat-toolbar color="primary" class="fixed-header">
+  <mat-toolbar-row>
+    <span><img src="./assets/logo.png" style="width:50px;"></span>
+    <a mat-button routerLink="/user" routerLinkActive="active">{{ "users list" | translate }}</a>
+    <a mat-button routerLink="/user/edit">{{ "add user" | translate }}</a>
 
-{{ displayHeadIdentity }} <button (click)="logout()">{{ "logout" | translate }}</button>
+    <div *ngIf="displayHeadIdentity; else login">
+      {{ displayHeadIdentity }}
+      <a mat-button (click)="logout()">Logout</a>
+    </div>
 
-<div>
-<button (click)="useLanguage('en')">en</button>
-<button (click)="useLanguage('fr')">fr</button>
-</div>
+    <ng-template #login>
+      <a mat-button routerLink="/signin">Login</a>
+    </ng-template>
+    <a mat-button (click)="useLanguage('en')">En</a>
+    <a mat-button (click)="useLanguage('fr')">Fr</a>
+  
+  </mat-toolbar-row>
+</mat-toolbar>

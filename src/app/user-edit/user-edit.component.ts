@@ -288,6 +288,49 @@ export class UserEditComponent implements OnInit {
     console.log(this.dCmptAddress.pop());
   }
 
+
+  buildFormError(controlLoc) {
+    for (let field in controlLoc) {
+      //=====
+      // Champ traite
+      this.formError[field] = '';
+
+      let control = controlLoc[field];
+      console.log('>> field : ' + field);
+
+      //==========
+      //
+      try {
+        if (control.controls) {
+          this.buildFormError(control.controls);
+        }
+      } catch (err) {
+        console.log('>> ' + field + 'pas de sous control');
+      }
+      //
+      //==========
+
+      if (control && control.dirty && !control.valid) {
+        let messages = this.validationMessage[field];
+
+        console.log('>> message ' + field + ' : ', messages);
+
+        for (let key in control.errors) {
+          //=====
+          // Type erreur
+          this.formError[field] = this.validationMessage[field + '-' + key];
+          // Type erreur
+          //=====
+        } // for (const key in control.errors)
+      } // if (control && control.dirty && !control.valid)
+      // Champ traite
+      //=====
+
+    } // for (const field in this.formUser.controls)
+
+  }
+
+
   /**
    * Enregister user
    */
@@ -340,46 +383,26 @@ export class UserEditComponent implements OnInit {
 
   }
 
-  buildFormError(controlLoc) {
-    for (let field in controlLoc) {
-      //=====
-      // Champ traite
-      this.formError[field] = '';
+  /**
+   * Enregister user
+   */
+  delete() {
+    //=====
+    // delete user
+    console.log('>>> user edit - delete');
+    console.log('>> password', this.userForm.value.password);
 
-      let control = controlLoc[field];
-      console.log('>> field : ' + field);
+    this.userService.setToken(this.sessionLoc.getToken());
 
-      //==========
-      //
-      try {
-        if (control.controls) {
-          this.buildFormError(control.controls);
-        }
-      } catch (err) {
-        console.log('>> ' + field + 'pas de sous control');
-      }
-      //
-      //==========
+    let resultPut = this.userService.deleteUser(this.dUser._id, this.userForm.value).then((val) => {
+      console.log('>>> then');
+      console.log(val);
+    });
+    console.log('Return put', resultPut);
 
-      if (control && control.dirty && !control.valid) {
-        let messages = this.validationMessage[field];
-
-        console.log('>> message ' + field + ' : ', messages);
-
-        for (let key in control.errors) {
-          //=====
-          // Type erreur
-          this.formError[field] = this.validationMessage[field + '-' + key];
-          // Type erreur
-          //=====
-        } // for (const key in control.errors)
-      } // if (control && control.dirty && !control.valid)
-      // Champ traite
-      //=====
-
-    } // for (const field in this.formUser.controls)
+    // delete user
+    //=====
 
   }
-
 
 }

@@ -54,5 +54,7 @@
       </div>
     </ng-template>
   </div>nam {{ userForm.invalid }}
-  <button type="submit " [disabled]="userForm.invalid " (click)="register() ">{{ "Register " | translate }}</button>
+  <button type="submit " [disabled]="userForm.invalid " (click)="register() ">{{ "Register" | translate }}</button>
+  <button type="submit " (click)="delete() ">{{ "Delete" | translate }}</button>
+
 </form>
