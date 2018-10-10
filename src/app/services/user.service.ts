@@ -63,9 +63,7 @@ export class UserService {
 
     let headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
-      //      .append('Access-Control-Allow-Origin', '*')
       .append('token', this.token)
-    //      .append('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
 
     return this.http.get<User[]>(url, { headers: headers });
   }
@@ -199,7 +197,8 @@ export class UserService {
 
   public putUser(idUser: number, userParam: User) {
     let headers = new HttpHeaders()
-      .set("Content-Type", "application/json");
+      .append('Content-Type', 'application/json')
+      .append('token', this.token)
 
     const httpOptions = {
       headers: new HttpHeaders({
@@ -216,12 +215,12 @@ export class UserService {
     let url: string = environment.USER_API_ROOT + param;
 
     console.log('user - service : putUsers');
-    console.log(url, JSON.stringify(JSON.stringify(userParam)));
+    console.log(url, JSON.stringify(userParam));
 
     return new Promise((resolve, reject) => {
-      this.http.put<User>(url, JSON.stringify(JSON.stringify(userParam)),
+      this.http.put<User>(url, JSON.stringify(userParam),
         //        { headers })
-        httpOptions)
+        { headers })
         .subscribe(
           returnUser => {
             console.log("PUT call successful value returned in body",

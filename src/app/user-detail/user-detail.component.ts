@@ -14,7 +14,9 @@ import { UserService } from '../services/user.service'
 })
 
 export class UserDetailComponent implements OnInit {
-
+  // affichage de l'user connecté
+  private displayIdentity: string;
+  
   private tabUser: User[] = null;
   private user: User = null;
   private userDisplay: number = 0;
@@ -30,6 +32,10 @@ export class UserDetailComponent implements OnInit {
 
   ngOnInit() {
     console.log('> user component init');
+
+    this.displayIdentity = this.sessionLoc.getFirstname() + ' - ' + this.sessionLoc.getLastname();
+
+
     //=====
     // Init user
     this.route.paramMap.subscribe((params: ParamMap) => {

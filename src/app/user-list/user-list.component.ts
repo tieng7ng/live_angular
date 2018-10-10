@@ -8,6 +8,11 @@ import { SessionLocService } from '../services/session-loc.service';
 import { User } from '../models/user.model';
 import { UserService } from '../services/user.service';
 
+import { MatDialog } from "@angular/material";
+import { MyDialogOptionComponent } from "../my-dialog-option/my-dialog-option.component";
+import { MyDialogComponent } from "../my-dialog/my-dialog.component";
+
+
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',
@@ -31,23 +36,19 @@ export class UserListComponent implements OnInit {
     private userS: UserService,
     private route: ActivatedRoute,
     private router: Router,
-    private translateService: TranslateService
-    
+    private translateService: TranslateService,
+    private dialog: MatDialog
+
 
   ) { }
 
   ngOnInit() {
-//    this.tabUser = POKEMONS;
+    //    this.tabUser = POKEMONS;
     console.log('user-list - ngOnInit');
 
-    //=====
-    // Connecté?
-    if (!this.sessionLoc.getToken()) {
-      this.router.navigate(['/signin']);
-    }
+
     this.displayIdentity = this.sessionLoc.getFirstname() + ' - ' + this.sessionLoc.getLastname();
-    // Connecté?
-    //=====
+
 
     this.userS.setToken(this.sessionLoc.getToken());
     this.userS.getUsers().then((val) => {

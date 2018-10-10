@@ -2,9 +2,12 @@
 	"add address": "Ajouter adresse",
 	"add user": "Ajouter utilisateur",
 	"address": "Adresse",
+	"Unauthorized Access": "Authorisation refusée",
 	"delete address":"Supprimer adresse",
 	"email": "Email",
+	"error": "Erreur",
 	"firstname": "Prénom",
+	"Http failure response for (unknown url): 0 Unknown Error": "Erreur de connexion",
 	"lastname": "Nom",
 	"logout": "Déconnexion",
 	"non-compliance email": "Email non conforme",
@@ -14,6 +17,7 @@
 	"required street": "Rue requis",
 	"password": "Mot de passe",
 	"password min 8 chars": "Le mot de passe doit faire minimum 8 caractères",
+	"send": "Envoyer",
 	"users list": "Liste d'utilisateurs",
 	"": ""
 }

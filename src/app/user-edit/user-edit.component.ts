@@ -10,6 +10,14 @@ import { TranslateLocService } from '../services/translate-loc.service';
 import { User } from '../models/user.model';
 import { UserService } from '../services/user.service'
 
+//=====
+// Popup
+import { MatDialog } from "@angular/material";
+import { MyDialogOptionComponent } from "../my-dialog-option/my-dialog-option.component";
+import { MyDialogComponent } from "../my-dialog/my-dialog.component";
+// Popup
+//=====
+
 @Component({
   selector: 'app-user-edit',
   templateUrl: './user-edit.component.html',
@@ -67,7 +75,9 @@ export class UserEditComponent implements OnInit {
     private router: Router,
     private userService: UserService,
     private sessionLoc: SessionLocService,
-    private translateService: TranslateService) {
+    private translateService: TranslateService,
+    private dialog: MatDialog
+  ) {
   }
 
   ngOnInit() {
@@ -126,6 +136,14 @@ export class UserEditComponent implements OnInit {
             } else {
               //=====
               // User no exist
+              this.dialog.open(MyDialogComponent, {
+                data: {
+                  dialogTitle: 'Info',
+                  dialogBody: 'User unknow'
+                },
+                width: '250px'
+              })
+      
               // User no exist
               //=====
             }
@@ -374,6 +392,21 @@ export class UserEditComponent implements OnInit {
       let resultPut = this.userService.putUser(this.dUser._id, this.userForm.value).then((val) => {
         console.log('>>> then');
         console.log(val);
+
+
+
+
+        this.dialog.open(MyDialogComponent, {
+          data: {
+            dialogTitle: 'Info',
+            dialogBody: 'Update OK'
+          },
+          width: '250px'
+        })
+
+      }).catch((error) => {
+        console.log('>> catch');
+        console.log(error);
       });
       console.log('Return put', resultPut);
 

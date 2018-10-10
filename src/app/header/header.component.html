@@ -4,6 +4,14 @@
     <a mat-button routerLink="/user" routerLinkActive="active">{{ "users list" | translate }}</a>
     <a mat-button routerLink="/user/edit">{{ "add user" | translate }}</a>
 
+    <mat-form-field>
+      <mat-label>Langage</mat-label>
+      <mat-select #hasBackdrop>
+        <mat-option (click)="useLanguage('en')">en</mat-option>
+        <mat-option (click)="useLanguage('fr')">fr</mat-option>
+      </mat-select>
+    </mat-form-field>
+
     <div *ngIf="displayHeadIdentity; else login">
       {{ displayHeadIdentity }}
       <a mat-button (click)="logout()">Logout</a>
@@ -12,8 +20,151 @@
     <ng-template #login>
       <a mat-button routerLink="/signin">Login</a>
     </ng-template>
-    <a mat-button (click)="useLanguage('en')">En</a>
-    <a mat-button (click)="useLanguage('fr')">Fr</a>
-  
+
+
   </mat-toolbar-row>
 </mat-toolbar>
+
+
+<!--
+<mat-drawer-container class="example-container" [hasBackdrop]="hasBackdrop.value">
+  <mat-drawer #drawer [mode]="mode.value">I'm a drawer</mat-drawer>
+  <mat-drawer-content>
+    <mat-form-field>
+      <mat-label>Sidenav mode</mat-label>
+      <mat-select #mode value="side">
+        <mat-option value="side">Side</mat-option>
+        <mat-option value="over">Over</mat-option>
+        <mat-option value="push">Push</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Has backdrop</mat-label>
+      <mat-select #hasBackdrop>
+        <mat-option>Unset</mat-option>
+        <mat-option [value]="true">True</mat-option>
+        <mat-option [value]="false">False</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button mat-raised-button (click)="drawer.toggle()">Toggle drawer</button>
+  </mat-drawer-content>
+</mat-drawer-container>
+-->
+
+
+<!--
+<div class="demo-toolbar">
+  <p>
+    <mat-toolbar>
+      <button mat-icon-button>
+        <mat-icon>menu</mat-icon>
+      </button>
+
+      <span>Default Toolbar</span>
+      <span class="demo-fill-remaining"></span>
+
+      <button mat-button>Text</button>
+      <button mat-icon-button>
+        <mat-icon>code</mat-icon>
+      </button>
+
+      <button mat-icon-button color="warn">
+        <mat-icon>code</mat-icon>
+      </button>
+    </mat-toolbar>
+  </p>
+
+  <p>
+    <mat-toolbar color="primary">
+      <button mat-icon-button>
+        <mat-icon>menu</mat-icon>
+      </button>
+
+      <span>Primary Toolbar</span>
+      <span class="demo-fill-remaining"></span>
+
+      <mat-form-field>
+        <mat-label>Select</mat-label>
+        <mat-select>
+          <mat-option value="1">One</mat-option>
+          <mat-option value="2">Two</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="legacy">
+        <mat-label>Input</mat-label>
+        <input matInput>
+      </mat-form-field>
+
+      <button mat-raised-button>Text</button>
+      <button mat-raised-button color="accent">Accent</button>
+      <button mat-stroked-button>Stroked</button>
+    </mat-toolbar>
+  </p>
+
+  <p>
+    <mat-toolbar color="accent">
+      <button mat-icon-button>
+        <mat-icon>menu</mat-icon>
+      </button>
+
+      <span>Accent Toolbar</span>
+      <span class="demo-fill-remaining"></span>
+
+      <mat-form-field>
+        <mat-label>Select</mat-label>
+        <mat-select>
+          <mat-option value="1">One</mat-option>
+          <mat-option value="2">Two</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="legacy">
+        <mat-label>Input</mat-label>
+        <input matInput>
+      </mat-form-field>
+
+      <button mat-button>Text</button>
+      <button mat-flat-button>Flat</button>
+      <button mat-mini-fab color="">
+        <mat-icon>done</mat-icon>
+      </button>
+      <button mat-mini-fab color="primary">
+        <mat-icon>done</mat-icon>
+      </button>
+    </mat-toolbar>
+  </p>
+
+  <p>
+    <mat-toolbar>
+      <mat-toolbar-row>First Row</mat-toolbar-row>
+      <mat-toolbar-row>Second Row</mat-toolbar-row>
+    </mat-toolbar>
+  </p>
+
+  <p>
+    <mat-toolbar color="primary">
+      <mat-toolbar-row>
+        <span>First Row</span>
+      </mat-toolbar-row>
+
+      <mat-toolbar-row>
+        <span>Second Row</span>
+
+        <span class="demo-fill-remaining"></span>
+
+        <mat-icon class="demo-toolbar-icon">verified_user</mat-icon>
+      </mat-toolbar-row>
+
+      <mat-toolbar-row>
+        <span>Third Row</span>
+
+        <span class="demo-fill-remaining"></span>
+
+        <mat-icon class="demo-toolbar-icon">favorite</mat-icon>
+        <mat-icon class="demo-toolbar-icon">delete</mat-icon>
+      </mat-toolbar-row>
+    </mat-toolbar>
+  </p>
+</div>
+-->

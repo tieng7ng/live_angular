@@ -16,6 +16,9 @@ import { AngularWebStorageModule } from 'angular-web-storage';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { MyMaterialModule } from './modules/material.module';
+import { FlexLayoutModule } from '@angular/flex-layout';
+
+import { AuthGuardService as AuthGuard} from './services/auth-guard.service';
 
 //=====
 // Material  MatFormFieldControl
@@ -29,22 +32,29 @@ import { MatInputModule } from '@angular/material';
 // Component
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
+
+import { MyDialogOptionComponent } from './my-dialog-option/my-dialog-option.component';
+import { MyDialogComponent } from './my-dialog/my-dialog.component';
+
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 import { UserDetailComponent } from './user-detail/user-detail.component';
 import { UserEditComponent } from './user-edit/user-edit.component';
 import { UserListComponent } from './user-list/user-list.component';
+
+import { SignInComponent } from './sign-in/sign-in.component';
+
 // Component
 //=====
 
 //=====
 // Directive
 import { BorderCardDirectiveDirective } from './directives/border-card-directive.directive';
-import { SignInComponent } from './sign-in/sign-in.component';
-import { MyDialogOptionComponent } from './my-dialog-option/my-dialog-option.component';
-import { MyDialogComponent } from './my-dialog/my-dialog.component';
 // Directive
 //=====
+
+
+
 
 // Fichier de traduction
 export const createTranslateLoader = (http: HttpClient) => {
@@ -75,7 +85,7 @@ export const createTranslateLoader = (http: HttpClient) => {
     HttpClientModule,
     ReactiveFormsModule,
     AngularWebStorageModule,
-    
+
     MatInputModule,
     /*
     //=====
@@ -99,7 +109,9 @@ export const createTranslateLoader = (http: HttpClient) => {
       }
     }),
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [AuthGuard],
+  bootstrap: [AppComponent],
+  entryComponents: [MyDialogComponent, MyDialogOptionComponent]
+
 })
 export class AppModule { }

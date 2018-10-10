@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 
-import { MatDialog, MatDialogRef } from '@angular/material';
 import { TranslateService } from '@ngx-translate/core';
 
 import { SessionLocService } from '../services/session-loc.service'
@@ -10,6 +9,13 @@ import { TranslateLocService } from '../services/translate-loc.service';
 import { User } from '../models/user.model';
 import { UserService } from '../services/user.service'
 
+//=====
+// Popup
+import { MatDialog } from "@angular/material";
+import { MyDialogOptionComponent } from "../my-dialog-option/my-dialog-option.component";
+import { MyDialogComponent } from "../my-dialog/my-dialog.component";
+// Popup
+//=====
 
 @Component({
   selector: 'app-sign-in',
@@ -18,6 +24,7 @@ import { UserService } from '../services/user.service'
 })
 
 export class SignInComponent implements OnInit {
+  // affichage de l'user connecté
   displayIdentity: string;
 
 
@@ -45,10 +52,14 @@ export class SignInComponent implements OnInit {
     private translateLocService: TranslateLocService,
     private userService: UserService,
     private dialog: MatDialog,
+    private translateService: TranslateService,
+
   ) { }
 
   ngOnInit() {
     this.buildFormControl();
+    this.displayIdentity = '';
+
   }
 
 
@@ -193,12 +204,31 @@ export class SignInComponent implements OnInit {
       this.session.setFirstname(val['firstname']);
       this.session.setLastname(val['lastname']);
       // Passage de l'identifiant dans le header
-      this.displayIdentity = this.session.getFirstname() + ' - '+ this.session.getLastname();
+      this.displayIdentity = this.session.getFirstname() + ' - ' + this.session.getLastname();
       this.router.navigate(['/user']);
 
     }).catch((error) => {
-      console.log('>> catch');
-      console.log(error);
+      //=====
+      // Message error
+      if (error.status == 0) {
+        this.translateLocService.getTranslate('errorMessage', '', error.message);
+      } else {
+        this.translateLocService.getTranslate('errorMessage', '', error.error.failed);
+
+      }
+      this.translateLocService.getTranslate('errorTitle', '', 'error');
+
+      let tabMessage = this.translateLocService.getValidationMessage();
+      this.dialog.open(MyDialogComponent, {
+        data: {
+          dialogTitle: tabMessage['errorTitle-'],
+          dialogBody: tabMessage['errorMessage-']
+        },
+        width: '550px'
+      })
+      // Message error
+      //=====
+
     })
     // Post User
     //=====
