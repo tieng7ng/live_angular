@@ -10,6 +10,7 @@ export class User {
         public email: string,
         public name: User_name,
         public password: string,
+        public birthday: Date,
         public address: User_address[]
     ) {
 
@@ -22,6 +23,7 @@ export class User {
             json['email'],
             json['name'],
             json['password'],
+            json['birthday'],
             json['address']
         );
     }

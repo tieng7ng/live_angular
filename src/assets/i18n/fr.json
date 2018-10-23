@@ -10,6 +10,7 @@
 	"Http failure response for (unknown url): 0 Unknown Error": "Erreur de connexion",
 	"lastname": "Nom",
 	"logout": "Déconnexion",
+	"required birthday": "Date d'anniversaire requis",
 	"non-compliance email": "Email non conforme",
 	"required firstname": "Prénom requis",
 	"required lastname": "Nom requis",

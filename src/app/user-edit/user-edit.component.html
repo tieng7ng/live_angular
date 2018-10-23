@@ -1,60 +1,138 @@
 <app-header [displayHeadIdentity]="displayIdentity"></app-header>
 
-<p>
-  user-edit works!
-</p>
 
-<form [formGroup]="userForm">
-  <div class="form-group">
-    <label class="center-block">{{ "email" | translate }}:</label>
-    <input formControlName="email">
-    <div *ngIf="formError.email" class="alert alert-danger">{{ formError.email }}</div>
-  </div>
-  <div formGroupName="name">
+<mat-card class="card">
+  <mat-card-header>
+    <mat-card-title>Login</mat-card-title>
+  </mat-card-header>
 
-    <div class="form-group">
-      <label class="center-block">{{ "lastname" | translate }}:</label>
-      <input formControlName="last">
-      <div *ngIf="formError.last" class="alert alert-danger">{{ formError.last }}</div>
-    </div>
-    <div class="form-group">
-      <label class="center-block">{{ "firstname" | translate }}:</label>
-      <input formControlName="first">
-      <div *ngIf="formError.first" class="alert alert-danger">{{ formError.first }}</div>
-    </div>
-  </div>
+  <mat-card-content>
+    <form [formGroup]="userForm">
 
-
-  <div class="form-group">
-    <label class="center-block">{{ "password" | translate }}:</label>
-    <input type="password" formControlName="password">
-    <div *ngIf="formError.password" class="alert alert-danger">{{ formError.password }}</div>
-  </div>
-
-  <div class="form-group">
-    <label class="center-block">{{ "address" | translate }}:</label>
-    <button type="submit" (click)="addAddress()">{{ "add address" | translate }}</button>
-    <button type="submit" (click)="deleteAddress()">{{ "delete address" | translate }}</button>
-
-    <ng-template [ngIf]="dUserExist===1">
-      <div *ngFor="let userAddress of dUser?.address; let idx = index" class="col s6 m4">
-        {{ userAddress._id }}
-        << {{ idx }} <input value="{{ userAddress.street }}">
+      <div>
+        <mat-form-field>
+          <input matInput placeholder='{{ "email" | translate }}' formControlName="email" type="email" name="email">
+        </mat-form-field>
+        <div *ngIf="formError.email" class="alert alert-danger">{{ formError.email }}</div>
       </div>
-    </ng-template>
 
-    <ng-template [ngIf]="dUserExist===0">
+      <div formGroupName="name">
+        <div>
+          <mat-form-field>
+            <input matInput placeholder='{{ "lastname" | translate }}' formControlName="last" name="last">
+          </mat-form-field>
+          <div *ngIf="formError.last" class="alert alert-danger">{{ formError.last }}</div>
+        </div>
 
-      <div *ngIf="formError.street" class="alert alert-danger">{{ formError.street }}</div>
-
-      <div *ngFor="let a of dCmptAddress; let idx = index">
-        {{ idx }} <input formControlName="street">
-        <div *ngIf="formError.street" class="alert alert-danger">{{ formError.street }}</div>
-
+        <div>
+          <mat-form-field>
+            <input matInput placeholder='{{ "firstname" | translate }}' formControlName="first" name="first">
+          </mat-form-field>
+          <div *ngIf="formError.first" class="alert alert-danger">{{ formError.first }}</div>
+        </div>
       </div>
-    </ng-template>
-  </div>nam {{ userForm.invalid }}
-  <button type="submit " [disabled]="userForm.invalid " (click)="register() ">{{ "Register" | translate }}</button>
-  <button type="submit " (click)="delete() ">{{ "Delete" | translate }}</button>
 
-</form>
+      <div>
+        <mat-form-field>
+          <input matInput [matDatepicker]="picker" placeholder="Choose a date" formControlName="birthday" name="birthday">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <div *ngIf="formError.birthday" class="alert alert-danger">{{ formError.birthday }}</div>
+      </div>
+
+      <div>
+        <mat-form-field>
+          <input matInput placeholder='{{ "password" | translate }}' formControlName="password" type="password" name="password">
+        </mat-form-field>
+        <div *ngIf="formError.email" class="alert alert-danger">{{ formError.email }}</div>
+      </div>
+
+
+      <!-----
+      LISTE ADDRESS-->
+      <ng-template [ngIf]="dUserExist===1">
+        <div formGroupName="address">
+
+          <mat-form-field>
+            <input matInput placeholder='{{ "street" | translate }}' formControlName="street" name="street">
+          </mat-form-field>
+        </div>
+
+      </ng-template>
+      <!--LISTE ADDRESS
+      ----->
+
+
+      <!--
+      <div>
+        <label class="center-block">{{ "address" | translate }}:</label>
+        <button type="submit" (click)="addAddress()">{{ "add address" | translate }}</button>
+        <button type="submit" (click)="deleteAddress()">{{ "delete address" | translate }}</button>
+
+        <ng-template [ngIf]="dUserExist===1">
+          <div *ngFor="let userAddress of dUser?.address; let idx = index" class="col s6 m4">
+            <div>
+            </div>
+          </div>
+        </ng-template>
+
+        <ng-template [ngIf]="dUserExist===1">
+          <div *ngFor="let userAddress of dUser?.address; let idx = index" class="col s6 m4">
+            {{ userAddress._id }}
+            << {{ idx }} <input value="{{ userAddress.street }}">
+          </div>
+        </ng-template>
+
+
+
+        <ng-template [ngIf]="dUserExist===0">
+          <div *ngFor="let a of dCmptAddress; let idx = index">
+            {{ idx }} <input formControlName="street">
+            <div *ngIf="formError.street" class="alert alert-danger">{{ formError.street }}</div>
+
+          </div>
+        </ng-template>
+      </div>
+-->
+
+      <!--
+
+      <div class="form-group">
+        <label class="center-block">{{ "password" | translate }}:</label>
+        <input type="password" formControlName="password">
+        <div *ngIf="formError.password" class="alert alert-danger">{{ formError.password }}</div>
+      </div>
+
+      <div class="form-group">
+        <label class="center-block">{{ "address" | translate }}:</label>
+        <button type="submit" (click)="addAddress()">{{ "add address" | translate }}</button>
+        <button type="submit" (click)="deleteAddress()">{{ "delete address" | translate }}</button>
+
+        <ng-template [ngIf]="dUserExist===1">
+          <div *ngFor="let userAddress of dUser?.address; let idx = index" class="col s6 m4">
+            {{ userAddress._id }}
+            << {{ idx }} <input value="{{ userAddress.street }}">
+          </div>
+        </ng-template>
+
+        <ng-template [ngIf]="dUserExist===0">
+
+          <div *ngIf="formError.street" class="alert alert-danger">{{ formError.street }}</div>
+
+          <div *ngFor="let a of dCmptAddress; let idx = index">
+            {{ idx }} <input formControlName="street">
+            <div *ngIf="formError.street" class="alert alert-danger">{{ formError.street }}</div>
+
+          </div>
+        </ng-template>
+      </div>nam
+    -->
+      {{ userForm.invalid }}
+      <button type="submit " [disabled]="userForm.invalid " (click)="register() ">{{ "Register" | translate }}</button>
+      <button type="submit " (click)="delete() ">{{ "Delete" | translate }}</button>
+
+
+    </form>
+  </mat-card-content>
+</mat-card>

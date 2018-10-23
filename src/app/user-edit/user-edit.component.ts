@@ -33,6 +33,7 @@ export class UserEditComponent implements OnInit {
   userLastnameCtrl: FormControl;
   userPasswordCtrl: FormControl;
   userStreetCtrl: FormControl;
+  userBirthdayCtrl: FormControl;
 
   //=====
   // display
@@ -118,9 +119,18 @@ export class UserEditComponent implements OnInit {
               // Initialisation du formulaire
               this.userForm.patchValue({ // pathValue : pas toutes valeur - setValue : toutes les valeur 
                 email: this.dUser.email,
+                birthday: this.dUser.birthday,
               });
               //==========
               // Sous groupe
+
+              for(let cmpt= 0; cmpt < this.dUser.address.length; cmpt++)
+              {
+                this.userForm.get('address').patchValue({
+                  street: this.dUser.address[cmpt]['street']
+                });
+              }
+
               this.userForm.get('name').patchValue({
                 last: this.dUser.name.last,
                 first: this.dUser.name.first
@@ -130,7 +140,8 @@ export class UserEditComponent implements OnInit {
 
               // Initialisation du formulaire
               //=====
-
+              console.log('>>>> init userForm');
+              console.log(this.dUser.address);
               console.log(this.userForm);
 
             } else {
@@ -143,7 +154,7 @@ export class UserEditComponent implements OnInit {
                 },
                 width: '250px'
               })
-      
+
               // User no exist
               //=====
             }
@@ -205,30 +216,37 @@ export class UserEditComponent implements OnInit {
       [Validators.required]
     );
 
+    this.userBirthdayCtrl = this.fb.control('',
+      [Validators.required]
+    )
 
     if (this.dUserExist == 1) {
       console.log('>>> build controlm form user exist');
     } else {
       console.log('>>> build controlm form new user ');
-      this.userStreetCtrl = this.fb.control('',
-        [Validators.required]
-      );
 
       this.userPasswordCtrl = this.fb.control('',
         [Validators.required, Validators.minLength(8)]
       );
 
     }
+    this.userStreetCtrl = this.fb.control('',
+      []
+    );
 
     this.userForm = this.fb.group({
       email: this.userEmailCtrl,
       password: this.userPasswordCtrl,
+      birthday: this.userBirthdayCtrl,
       name: new FormGroup({
         first: this.userFirstnameCtrl,
         last: this.userLastnameCtrl
       }),
       // TODO gestion des erreurs de la liste DIFFERENT
-      street: this.userStreetCtrl
+
+      address: new FormGroup({
+        street: this.userStreetCtrl
+      })
     })
     // Build controleur
     //==========
@@ -287,6 +305,7 @@ export class UserEditComponent implements OnInit {
     this.translateLocService.getTranslate('first', 'required', 'required firstname');
     this.translateLocService.getTranslate('street', 'required', 'required street');
     this.translateLocService.getTranslate('password', 'minlength', 'password min 8 chars');
+    this.translateLocService.getTranslate('birthday', 'required', 'required birthday');
     this.translateLocService.getTranslate('email', 'email', 'non-compliance email');
 
     this.validationMessage = this.translateLocService.getValidationMessage();
@@ -331,15 +350,18 @@ export class UserEditComponent implements OnInit {
       if (control && control.dirty && !control.valid) {
         let messages = this.validationMessage[field];
 
-        console.log('>> message ' + field + ' : ', messages);
 
         for (let key in control.errors) {
           //=====
           // Type erreur
+          console.log('>> message ' + field + ' ' + key + ' : ');
+
           this.formError[field] = this.validationMessage[field + '-' + key];
           // Type erreur
           //=====
         } // for (const key in control.errors)
+
+        console.log(this.formError);
       } // if (control && control.dirty && !control.valid)
       // Champ traite
       //=====
@@ -347,7 +369,6 @@ export class UserEditComponent implements OnInit {
     } // for (const field in this.formUser.controls)
 
   }
-
 
   /**
    * Enregister user
@@ -371,8 +392,6 @@ export class UserEditComponent implements OnInit {
         console.log(error);
       })
 
-
-
       // Post User
       //=====
     } else {
@@ -387,14 +406,14 @@ export class UserEditComponent implements OnInit {
         delete this.userForm.value.password;
       }
       delete this.userForm.value.street;
-      this.userService.setToken(this.sessionLoc.getToken());
 
+      //==========
+      // Send data
+      //      this.userService.setToken(this.sessionLoc.getToken());
+      console.log(this.userForm.value);
       let resultPut = this.userService.putUser(this.dUser._id, this.userForm.value).then((val) => {
         console.log('>>> then');
         console.log(val);
-
-
-
 
         this.dialog.open(MyDialogComponent, {
           data: {
@@ -407,7 +426,18 @@ export class UserEditComponent implements OnInit {
       }).catch((error) => {
         console.log('>> catch');
         console.log(error);
+
+        this.dialog.open(MyDialogComponent, {
+          data: {
+            dialogTitle: 'Error',
+            dialogBody: error.message
+          },
+          width: '250px'
+        })
+
       });
+      // Send data
+      //==========
       console.log('Return put', resultPut);
 
       // Maj user
