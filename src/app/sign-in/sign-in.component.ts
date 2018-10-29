@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 
-import { TranslateService } from '@ngx-translate/core';
-
 import { SessionLocService } from '../services/session-loc.service'
 import { TranslateLocService } from '../services/translate-loc.service';
 import { User } from '../models/user.model';
@@ -26,7 +24,6 @@ import { MyDialogComponent } from "../my-dialog/my-dialog.component";
 export class SignInComponent implements OnInit {
   // affichage de l'user connecté
   displayIdentity: string;
-
 
   userEmailCtrl: FormControl;
   userPasswordCtrl: FormControl;
@@ -52,8 +49,6 @@ export class SignInComponent implements OnInit {
     private translateLocService: TranslateLocService,
     private userService: UserService,
     private dialog: MatDialog,
-    private translateService: TranslateService,
-
   ) { }
 
   ngOnInit() {
@@ -116,9 +111,9 @@ export class SignInComponent implements OnInit {
 
     //=====
     // Message erreur
-    this.translateLocService.getTranslate('password', 'required', 'required password');
-    this.translateLocService.getTranslate('password', 'minlength', 'password min 8 chars');
-    this.translateLocService.getTranslate('email', 'email', 'non-compliance email');
+    this.translateLocService.getTranslate('password-required', 'required password');
+    this.translateLocService.getTranslate('password-minlength', 'password min 8 chars');
+    this.translateLocService.getTranslate('email-email', 'non-compliance email');
 
     this.validationMessage = this.translateLocService.getValidationMessage();
     // Message erreur
@@ -211,12 +206,12 @@ export class SignInComponent implements OnInit {
       //=====
       // Message error
       if (error.status == 0) {
-        this.translateLocService.getTranslate('errorMessage', '', error.message);
+        this.translateLocService.getTranslate('errorMessage', error.message);
       } else {
-        this.translateLocService.getTranslate('errorMessage', '', error.error.failed);
+        this.translateLocService.getTranslate('errorMessage', error.error.failed);
 
       }
-      this.translateLocService.getTranslate('errorTitle', '', 'error');
+      this.translateLocService.getTranslate('errorTitle', 'error');
 
       let tabMessage = this.translateLocService.getValidationMessage();
       this.dialog.open(MyDialogComponent, {
@@ -233,7 +228,5 @@ export class SignInComponent implements OnInit {
     // Post User
     //=====
 
-
   }
-
 }

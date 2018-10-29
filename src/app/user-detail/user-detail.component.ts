@@ -2,10 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 
 import { SessionLocService } from '../services/session-loc.service';
+import { TranslateLocService } from '../services/translate-loc.service';
 
 // import { POKEMONS } from '../mock/mock-user';
 import { User } from '../models/user.model';
-import { UserService } from '../services/user.service'
+import { UserService } from '../services/user.service';
+
+import { MatDialog } from "@angular/material";
+import { MyDialogOptionComponent } from "../my-dialog-option/my-dialog-option.component";
 
 @Component({
   selector: 'app-user-detail',
@@ -22,10 +26,11 @@ export class UserDetailComponent implements OnInit {
   private userDisplay: number = 0;
 
   constructor(
+    private dialog: MatDialog,
     private route: ActivatedRoute,
     private router: Router,
     private sessionLoc: SessionLocService,
-
+    private translateLocService: TranslateLocService,
     private userService: UserService,
   ) {
   }
@@ -69,5 +74,64 @@ export class UserDetailComponent implements OnInit {
   editUser(user: User) {
     //navigation link.
     this.router.navigate(['user/' + user._id + '/edit']);
+  }
+
+
+    /**
+   * 
+   * @param userId 
+   * @param userEmail 
+   */
+  openDialog(userId: string, userEmail: string): void {
+    //=====
+    // Message error
+    this.translateLocService.getTranslate('dialogTitle', 'Validat');
+    this.translateLocService.getTranslate('dialogMessage', 'Delete user');
+
+    let tabMessage = this.translateLocService.getValidationMessage();
+    let dialogRef = this.dialog.open(MyDialogOptionComponent, {
+      data: {
+        dialogTitle: tabMessage['dialogTitle'],
+        dialogBody: tabMessage['dialogMessage']+' : '+userEmail,
+        dialogParam: userId
+      },
+      width: '550px'
+    })
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      console.log(result);
+      if (result == true) {
+        this.deleteUser(userId);11
+      }
+    });
+
+    console.log('>> end myDialogOption');
+    // Message error
+    //=====
+  }
+
+  
+  deleteUser(userId: string): void {
+    console.log(userId);
+    //=====
+    // delete user
+    console.log('>>> user edit - delete');
+
+    this.userService.setToken(this.sessionLoc.getToken());
+
+    let resultPut = this.userService.deleteUser(userId).then((val) => {
+      console.log('>>> then');
+      console.log(val);
+      this.router.navigateByUrl('/user');
+    }).catch((error) => {
+      console.log('>> catch');
+      console.log(error);
+    })
+    
+    console.log('Return put', resultPut);
+
+    // delete user
+    //=====
   }
 }

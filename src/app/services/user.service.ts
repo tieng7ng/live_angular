@@ -95,17 +95,7 @@ export class UserService {
 
     let headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
-      //      .append('Access-Control-Allow-Origin', '*')
       .append('token', this.token)
-    //      .append('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-
-
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        //      'Authorization': 'my-auth-token'
-      })
-    };
 
     // Authorization: `Bearer ${currentUser.token}`
     console.log(headers, headers.get('Authorization'));
@@ -133,17 +123,17 @@ export class UserService {
 
   public postUser(userParam: User) {
     let headers = new HttpHeaders()
-      .set("Content-Type", "application/json");
+      .append('Content-Type', 'application/json')
+      .append('token', this.token)
 
     let param: string = '?token=' + this.token;
-
     let url = environment.USER_API_ROOT + param;
 
     console.log('user - service : postUsers'
-      , url, JSON.stringify(JSON.stringify(userParam)));
+      , url, JSON.stringify(userParam));
 
     return new Promise((resolve, reject) => {
-      this.http.post<User>(url, JSON.stringify(JSON.stringify(userParam)),
+      this.http.post<User>(url, JSON.stringify(userParam),
         { headers })
         .subscribe(
           returnUser => {
@@ -238,7 +228,7 @@ export class UserService {
     });
   }
 
-  public deleteUser(idUser: number, userParam: User) {
+  public deleteUser(idUser: string) {
     let param: string = `/${idUser}`;
     let url: string = environment.USER_API_ROOT + param;
 

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormArray, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 
 
@@ -8,6 +8,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { SessionLocService } from '../services/session-loc.service';
 import { TranslateLocService } from '../services/translate-loc.service';
 import { User } from '../models/user.model';
+import { User_address } from '../models/user_address.model';
+
 import { UserService } from '../services/user.service'
 
 //=====
@@ -32,12 +34,18 @@ export class UserEditComponent implements OnInit {
   userFirstnameCtrl: FormControl;
   userLastnameCtrl: FormControl;
   userPasswordCtrl: FormControl;
+  userAddressIdCtrl: FormControl;
   userStreetCtrl: FormControl;
+  userCountryCtrl: FormControl;
+  userCityCtrl: FormControl;
+
   userBirthdayCtrl: FormControl;
 
   //=====
   // display
   userForm: FormGroup;
+  addressFormArray: FormArray;
+
   formError = {
     //    'password': '',
     //    'email': ''
@@ -61,12 +69,6 @@ export class UserEditComponent implements OnInit {
    */
   dUserExist: number = 0;
 
-  // dCmptAddress
-
-  /**
-   * compteur address
-   */
-  dCmptAddress;
   // Edition user
   //=====
 
@@ -99,12 +101,14 @@ export class UserEditComponent implements OnInit {
     this.route.paramMap.subscribe((params: ParamMap) => {
       let id = params.get('id');
 
-      this.dUserExist = 1;
-      this.buildFormControl();
-
       if (id) {
-        this.userService.setToken(this.sessionLoc.getToken());
+        //=====
+        // Update user
+        this.dUserExist = 1;
+        this.buildFormControl();
 
+        // Preparation appell API user
+        this.userService.setToken(this.sessionLoc.getToken());
         this.userService.searchUser([[['_id'], [id]]])
           .subscribe(data => {
             //=====
@@ -117,26 +121,63 @@ export class UserEditComponent implements OnInit {
               console.log('>>> userForm', this.userForm);
               //=====
               // Initialisation du formulaire
+
+              // TODO déplacer dans buildFormControl
               this.userForm.patchValue({ // pathValue : pas toutes valeur - setValue : toutes les valeur 
-                email: this.dUser.email,
+                email: this.dUser.email + 'XXX',
                 birthday: this.dUser.birthday,
               });
+
               //==========
               // Sous groupe
-
-              for(let cmpt= 0; cmpt < this.dUser.address.length; cmpt++)
-              {
-                this.userForm.get('address').patchValue({
-                  street: this.dUser.address[cmpt]['street']
-                });
-              }
-
               this.userForm.get('name').patchValue({
                 last: this.dUser.name.last,
                 first: this.dUser.name.first
               });
+
+              console.log('>>> userForm.address');
+              console.log(this.userForm.get('address'));
+
+              //===============
+              // Build address list
+              let userAdress = new User_address();
+
+              //====================
+              // Delete champ @ initialise lors creation
+              this.addFormArray.removeAt(0);
+              // Delete champ @ initialise lors creation
+              //====================
+
+              for (let cmpt = 0; cmpt < this.dUser.address.length; cmpt++) {
+
+                this.userAddressIdCtrl = this.fb.control(this.dUser.address[cmpt]['_id'],
+                  [Validators.required]
+                );
+                this.userStreetCtrl = this.fb.control(this.dUser.address[cmpt]['street'],
+                  [Validators.required]
+                );
+                this.userCityCtrl = this.fb.control(this.dUser.address[cmpt]['city'],
+                  [Validators.required]
+                );
+                this.userCountryCtrl = this.fb.control(this.dUser.address[cmpt]['country'],
+                  [Validators.required]
+                );
+
+                let addressForm = new FormGroup({
+                  _id: this.userAddressIdCtrl,
+                  street: this.userStreetCtrl,
+                  country: this.userCountryCtrl,
+                  city: this.userCityCtrl
+                });
+
+                this.addFormArray.push(addressForm);
+              }
+              // Build address list
+              //===============
+
               // Sous groupe
               //==========
+
 
               // Initialisation du formulaire
               //=====
@@ -167,13 +208,12 @@ export class UserEditComponent implements OnInit {
 
           }
           );
-
+        // Update user
+        //=====
       } else {
         //=====
         // add User
         console.log('>>> add USER');
-        this.dCmptAddress = new Array(1);
-        console.log('>> cmpt address', this.dCmptAddress);
         this.dUserExist = 0;
         this.buildFormControl();
 
@@ -186,6 +226,11 @@ export class UserEditComponent implements OnInit {
     //=====
 
   }
+
+  get addFormArray(): FormArray {
+    return this.userForm.get('address') as FormArray;
+  }
+
 
   /***
    * Build controleur du formulaire + messages erreurs
@@ -203,6 +248,7 @@ export class UserEditComponent implements OnInit {
 
     //==========
     // Build controleur
+    // TODO definition des champs
 
     this.userEmailCtrl = this.fb.control('',
       [Validators.required, Validators.email]
@@ -230,9 +276,22 @@ export class UserEditComponent implements OnInit {
       );
 
     }
+
     this.userStreetCtrl = this.fb.control('',
-      []
+      [Validators.required]
     );
+    this.userCityCtrl = this.fb.control('',
+      [Validators.required]
+    );
+    this.userCountryCtrl = this.fb.control('',
+      [Validators.required]
+    );
+
+    let addressForm = new FormGroup({
+      street: this.userStreetCtrl,
+      country: this.userCountryCtrl,
+      city: this.userCityCtrl
+    });
 
     this.userForm = this.fb.group({
       email: this.userEmailCtrl,
@@ -244,9 +303,7 @@ export class UserEditComponent implements OnInit {
       }),
       // TODO gestion des erreurs de la liste DIFFERENT
 
-      address: new FormGroup({
-        street: this.userStreetCtrl
-      })
+      address: this.fb.array([addressForm])
     })
     // Build controleur
     //==========
@@ -300,13 +357,13 @@ export class UserEditComponent implements OnInit {
 
     //=====
     // Message erreur
-    this.translateLocService.getTranslate('password', 'required', 'required password');
-    this.translateLocService.getTranslate('last', 'required', 'required lastname');
-    this.translateLocService.getTranslate('first', 'required', 'required firstname');
-    this.translateLocService.getTranslate('street', 'required', 'required street');
-    this.translateLocService.getTranslate('password', 'minlength', 'password min 8 chars');
-    this.translateLocService.getTranslate('birthday', 'required', 'required birthday');
-    this.translateLocService.getTranslate('email', 'email', 'non-compliance email');
+    this.translateLocService.getTranslate('password-required', 'required password');
+    this.translateLocService.getTranslate('last-required', 'required lastname');
+    this.translateLocService.getTranslate('first-required', 'required firstname');
+    this.translateLocService.getTranslate('street-required', 'required street');
+    this.translateLocService.getTranslate('password-minlength', 'password min 8 chars');
+    this.translateLocService.getTranslate('birthday-required', 'required birthday');
+    this.translateLocService.getTranslate('email-email', 'non-compliance email');
 
     this.validationMessage = this.translateLocService.getValidationMessage();
     // Message erreur
@@ -316,13 +373,28 @@ export class UserEditComponent implements OnInit {
   //=====
 
   addAddress() {
-    console.log('>>> addAddress');
-    console.log(this.dCmptAddress.push('2'));
+    this.userStreetCtrl = this.fb.control('',
+      [Validators.required]
+    );
+    this.userCityCtrl = this.fb.control('',
+      [Validators.required]
+    );
+    this.userCountryCtrl = this.fb.control('',
+      [Validators.required]
+    );
+
+    let addressForm = new FormGroup({
+      street: this.userStreetCtrl,
+      country: this.userCountryCtrl,
+      city: this.userCityCtrl
+    });
+
+    this.addFormArray.push(addressForm);
   }
 
-  deleteAddress() {
+  deleteAddress(pos: number) {
     console.log('>>> deleteAddress');
-    console.log(this.dCmptAddress.pop());
+    this.addFormArray.removeAt(pos);
   }
 
 
@@ -333,7 +405,6 @@ export class UserEditComponent implements OnInit {
       this.formError[field] = '';
 
       let control = controlLoc[field];
-      console.log('>> field : ' + field);
 
       //==========
       //
@@ -374,6 +445,10 @@ export class UserEditComponent implements OnInit {
    * Enregister user
    */
   register() {
+    if (this.userForm.invalid) {
+      return true;
+    }
+
     if (this.dUserExist == 0) {
       //=====
       // Post User
@@ -388,8 +463,13 @@ export class UserEditComponent implements OnInit {
         console.log(JSON.stringify(resultPost));
 
       }).catch((error) => {
-        console.log('>> catch');
-        console.log(error);
+        this.dialog.open(MyDialogComponent, {
+          data: {
+            dialogTitle: 'Error',
+            dialogBody: error.message
+          },
+          width: '250px'
+        })
       })
 
       // Post User
@@ -446,26 +526,5 @@ export class UserEditComponent implements OnInit {
 
   }
 
-  /**
-   * Enregister user
-   */
-  delete() {
-    //=====
-    // delete user
-    console.log('>>> user edit - delete');
-    console.log('>> password', this.userForm.value.password);
-
-    this.userService.setToken(this.sessionLoc.getToken());
-
-    let resultPut = this.userService.deleteUser(this.dUser._id, this.userForm.value).then((val) => {
-      console.log('>>> then');
-      console.log(val);
-    });
-    console.log('Return put', resultPut);
-
-    // delete user
-    //=====
-
-  }
 
 }

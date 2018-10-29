@@ -2,8 +2,11 @@
 	"add address": "Ajouter adresse",
 	"add user": "Ajouter utilisateur",
 	"address": "Adresse",
+	"City": "Ville",
+	"Country": "Pays",
 	"Unauthorized Access": "Authorisation refusée",
-	"delete address":"Supprimer adresse",
+	"delete address": "Supprimer une adresse",
+	"Delete user": "Supprimer un utilisateur",
 	"email": "Email",
 	"error": "Erreur",
 	"firstname": "Prénom",
@@ -19,6 +22,8 @@
 	"password": "Mot de passe",
 	"password min 8 chars": "Le mot de passe doit faire minimum 8 caractères",
 	"send": "Envoyer",
+	"Street": "Rue",
 	"users list": "Liste d'utilisateurs",
+	"validat": "Validation",
 	"": ""
 }

@@ -48,19 +48,30 @@
         <div *ngIf="formError.email" class="alert alert-danger">{{ formError.email }}</div>
       </div>
 
+      <hr>
+      <button type="submit " (click)="addAddress() ">{{ "Add address" | translate }}</button>
+
 
       <!-----
-      LISTE ADDRESS-->
-      <ng-template [ngIf]="dUserExist===1">
-        <div formGroupName="address">
-
+      LISTE ADDRESS
+      -->
+      <div formArrayName="address" *ngFor="let add of userForm.get('address').controls; let ind=index;">
+        <div [formGroupName]="ind">
           <mat-form-field>
-            <input matInput placeholder='{{ "street" | translate }}' formControlName="street" name="street">
+            <input matInput placeholder='{{ "Street" | translate }}' formControlName="street" name="street">
           </mat-form-field>
-        </div>
+          <mat-form-field>
+            <input matInput placeholder='{{ "City" | translate }}' formControlName="city" name="city">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder='{{ "Country" | translate }}' formControlName="country" name="country">
+          </mat-form-field>
+          <button type="submit " (click)="deleteAddress(ind) ">{{ "Delete address" | translate }}</button>
 
-      </ng-template>
-      <!--LISTE ADDRESS
+        </div>
+      </div>
+      <!--
+      LISTE ADDRESS
       ----->
 
 
@@ -128,10 +139,7 @@
         </ng-template>
       </div>nam
     -->
-      {{ userForm.invalid }}
-      <button type="submit " [disabled]="userForm.invalid " (click)="register() ">{{ "Register" | translate }}</button>
-      <button type="submit " (click)="delete() ">{{ "Delete" | translate }}</button>
-
+      <button type="submit" (click)="register() ">{{ "Register" | translate }}</button>
 
     </form>
   </mat-card-content>

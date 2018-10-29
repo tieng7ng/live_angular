@@ -5,6 +5,7 @@ import { LocalStorageService, SessionStorageService, LocalStorage, SessionStorag
 
 // import { POKEMONS } from '../mock/mock-user';
 import { SessionLocService } from '../services/session-loc.service';
+import { TranslateLocService } from '../services/translate-loc.service';
 import { User } from '../models/user.model';
 import { UserService } from '../services/user.service';
 
@@ -36,10 +37,8 @@ export class UserListComponent implements OnInit {
     private userS: UserService,
     private route: ActivatedRoute,
     private router: Router,
-    private translateService: TranslateService,
+    private translateLocService: TranslateLocService,
     private dialog: MatDialog
-
-
   ) { }
 
   ngOnInit() {
@@ -72,5 +71,6 @@ export class UserListComponent implements OnInit {
   goBack(): void {
     this.router.navigate(['/users']);
   }
+
 
 }

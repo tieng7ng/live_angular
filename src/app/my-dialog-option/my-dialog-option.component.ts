@@ -1,6 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material';
-import { MatDialogRef } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 
 @Component({
   selector: 'app-my-dialog-option',
@@ -9,20 +8,29 @@ import { MatDialogRef } from '@angular/material';
 })
 export class MyDialogOptionComponent implements OnInit {
 
+  dialogBody: string;
+  dialogTitle: string;
+  dialogParam: string;
+
   constructor(
     public thisDialogRef: MatDialogRef<MyDialogOptionComponent>,
-    @Inject(MAT_DIALOG_DATA) { dialogTitle, dialogBody },
-    public data: string
-  ) { }
+    @Inject(MAT_DIALOG_DATA) { dialogTitle, dialogBody, dialogParam }
+  ) {
+    this.dialogTitle = dialogTitle;
+    this.dialogBody = dialogBody;
+    this.dialogParam = dialogParam;
+  }
 
   ngOnInit() {
   }
 
   onCloseConfirm() {
-    this.thisDialogRef.close('Confirm');
+    this.thisDialogRef.close(true);
   }
 
   onCloseCancel() {
+    console.log('my-dialog-option cancel');
+
     this.thisDialogRef.close('Cancel');
   }
 }

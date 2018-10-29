@@ -10,18 +10,18 @@ export class MyDialogComponent implements OnInit {
   dialogBody: string;
   dialogTitle: string;
 
-  constructor(private dialogRef: MatDialogRef<MyDialogComponent>,
+  constructor(
+    private dialogRef: MatDialogRef<MyDialogComponent>,
     @Inject(MAT_DIALOG_DATA) { dialogTitle, dialogBody }
   ) {
 
-console.log('my dialogComponent constructor');
-console.log('>>> dialogBody '+dialogBody);
+    console.log('my dialogComponent constructor');
+    console.log('>>> dialogBody ' + dialogBody);
 
-    this.dialogBody = dialogBody;
     this.dialogTitle = dialogTitle;
+    this.dialogBody = dialogBody;
 
-
-   }
+  }
 
   ngOnInit() {
   }

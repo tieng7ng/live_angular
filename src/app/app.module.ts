@@ -16,7 +16,7 @@ import { AngularWebStorageModule } from 'angular-web-storage';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { MyMaterialModule } from './modules/material.module';
-import { FlexLayoutModule } from '@angular/flex-layout';
+//import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { AuthGuardService as AuthGuard} from './services/auth-guard.service';
 
@@ -50,6 +50,7 @@ import { SignInComponent } from './sign-in/sign-in.component';
 //=====
 // Directive
 import { BorderCardDirectiveDirective } from './directives/border-card-directive.directive';
+import { MyDialogValidComponent } from './my-dialog-valid/my-dialog-valid.component';
 // Directive
 //=====
 
@@ -75,6 +76,7 @@ export const createTranslateLoader = (http: HttpClient) => {
     SignInComponent,
     MyDialogOptionComponent,
     MyDialogComponent,
+    MyDialogValidComponent,
     //    FormBuilder,
     //    FormGroup
   ],

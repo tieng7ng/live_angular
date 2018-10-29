@@ -19,10 +19,10 @@ export class TranslateLocService {
    * @param key2: type erreur
    * @param translate : message erreur
    */
-  getTranslate(key1: string, key2: string, translate: string) {
+  getTranslate(key: string, translate: string) {
     this.translateService.get(translate).subscribe(
       translation => {
-        this.validationMessage[key1 + '-' + key2] = translation;
+        this.validationMessage[key] = translation;
       }
     );
   }
